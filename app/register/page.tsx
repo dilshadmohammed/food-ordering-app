@@ -2,7 +2,7 @@
 import { signIn } from 'next-auth/react';
 import Image from 'next/image'
 import Link from 'next/link';
-import React, { FormEvent, useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 
 
