@@ -2,13 +2,12 @@
 import { useSession } from 'next-auth/react'
 import Image from 'next/image';
 import {redirect} from 'next/navigation'
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 function page() {
     const { data: session, status, update } = useSession()
     const [userName,setUserName] = useState("")
-    const [saved,setSaved] = useState(false);
-    const [isSaving,setIsSaving] = useState(false);
 
     useEffect(() => {
         if(status === 'authenticated') {
@@ -19,20 +18,67 @@ function page() {
 
     async function handleProfileInfo(e:FormEvent) {
         e.preventDefault()
-        setIsSaving(true)
-        setSaved(false)
-        const response = await fetch('/api/profile',{
-            method: 'PUT',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({name:userName as string})
+        await toast.promise(new Promise<void>(async (resolve,reject)=>{
+            const response = await fetch('/api/profile',{
+                method: 'PUT',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({name:userName as string})
+            })
+            if(response.ok)
+            {
+                update({name:userName})
+                resolve()
+            }
+            else{
+                reject()
+            }
+        }),{
+            loading:'Saving',
+            success:'Profile saved!',
+            error:'Error'
         })
-        setIsSaving(false)
-        if(response.ok)
-        {
-            update({name:userName})
-            setSaved(true)
-        }
+        
     }
+
+    async function handleImageChange(e:ChangeEvent<HTMLInputElement>) {
+        await toast.promise(new Promise<void>((resolve, reject) => {
+            const files = e.target.files;
+        
+            if (files?.length === 1) {
+                const data = new FormData();
+                data.set('file', files[0]);
+                data.set('username', userName);
+        
+                fetch('/api/upload', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to upload file');
+                    }
+                })
+                .then(responseData => {
+                    update({ image: responseData.imageurl });
+                    resolve();
+                })
+                .catch(error => {
+                    console.error(error);
+                    reject();
+                });
+            }
+        })
+        ,{
+            loading:'Uploading...',
+            success:'Upload completed!',
+            error:'Error in uploading!'
+        })
+        
+
+    }
+    
     
     if(status === 'loading'){
         return (
@@ -52,23 +98,14 @@ function page() {
             Profile
         </h1>
         <div className='max-w-md mx-auto'>
-              {saved && (
-
-                  <h2 className='text-center bg-green-100 rounded-lg p-4 border border-green-300'>
-                      Profile saved!
-                  </h2>
-              )}
-              {isSaving && (
-
-                <h2 className='text-center bg-orange-300 rounded-lg p-4 border border-orange-300'>
-                    Saving...
-                </h2>
-            )}
             <div className='flex gap-4 items-center'>
                 <div>
-                    <div className='p-2 rounded-lg relative'>
+                    <div className='p-2 rounded-lg relative max-w-[120px] max-h-[120px'>
                         <Image className='rounded-lg w-full h-full mb-1' src={userImage || ' '} alt='avatar' width={250} height={250} />
-                        <button type='button'>Edit</button>
+                        <label>   
+                            <input type="file" className='hidden' onChange={handleImageChange} />
+                            <span className='block border border-gray-300 cursor-pointer rounded-lg p-2 text-center'>Edit</span>
+                        </label>
                     </div>
                 </div>      
                 <form className='grow' onSubmit={handleProfileInfo}>

@@ -18,6 +18,9 @@ export const authOptions = {
       if (trigger === "update" && session?.name) {
         token.name = session.name
       }
+      if(trigger === "update" && session?.image) {
+        token.picture = session.image
+      }
       return token
     }
   },

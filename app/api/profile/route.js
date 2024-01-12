@@ -10,6 +10,10 @@ export async function PUT(req) {
         if('name' in data) {
            await User.updateOne({ email: email }, { $set: { name: data.name } })
         }
+        if('image' in data)
+        {
+            
+        }
 
         return Response.json(true)
     }).finally(() => closeDatabaseConnection())
