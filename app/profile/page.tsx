@@ -8,6 +8,11 @@ import toast from 'react-hot-toast';
 function page() {
     const { data: session, status, update } = useSession()
     const [userName,setUserName] = useState("")
+    const [phone,setPhone] = useState("")
+    const [street,setStreet] = useState("")
+    const [postalCode,setPostalCode] = useState("")
+    const [city,setCity] = useState("")
+    const [country,setCountry] = useState("")
 
     useEffect(() => {
         if(status === 'authenticated') {
@@ -98,10 +103,10 @@ function page() {
             Profile
         </h1>
         <div className='max-w-md mx-auto'>
-            <div className='flex gap-4 items-center'>
+            <div className='flex gap-4'>
                 <div>
                     <div className='p-2 rounded-lg relative max-w-[120px] max-h-[120px'>
-                        <Image className='rounded-lg w-full h-full mb-1' src={userImage || ' '} alt='avatar' width={250} height={250} />
+                        <Image className='rounded-lg w-full h-full mb-1' src={userImage || '/default-avatar.png'} alt='avatar' width={250} height={250} />
                         <label>   
                             <input type="file" className='hidden' onChange={handleImageChange} />
                             <span className='block border border-gray-300 cursor-pointer rounded-lg p-2 text-center'>Edit</span>
@@ -112,6 +117,18 @@ function page() {
                     <input type="text" placeholder="First and last name" 
                     value={userName} onChange={e => setUserName(e.target.value)}/>
                     <input type="text" value={session?.user?.email || ' '} disabled={true} />
+                    <input type="tel" placeholder='Phone number' 
+                        value={phone} onChange={e => setPhone(e.target.value)} />
+                    <input type="text" placeholder='Street'
+                        value={street} onChange={e => setStreet(e.target.value)} />
+                    <div className="flex gap-4">
+                        <input type="text" placeholder='Postal code'
+                            value={postalCode} onChange={e => setPostalCode(e.target.value)}/>
+                        <input type="text" placeholder='City' 
+                            value={city} onChange={e => setCity(e.target.value)}/>
+                    </div>
+                    <input type="text" placeholder='Country' 
+                        value={country} onChange={e => setCountry(e.target.value)}/>
                     <button type='submit'>Save</button>
                 </form>
             </div>
