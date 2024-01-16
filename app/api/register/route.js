@@ -24,8 +24,6 @@ export async function POST(req) {
     return new Response(JSON.stringify({
       error: error.errors?.password?.message || 'Internal Server Error',
     }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-  } finally {
-    await closeDatabaseConnection();
   }
   
 }

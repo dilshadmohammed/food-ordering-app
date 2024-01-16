@@ -53,8 +53,6 @@ export const authOptions = {
               }
             } catch (error) {
               return Promise.reject('/auth/signin?error=UnknownError');
-            } finally {
-              await closeDatabaseConnection();
             }
           }
         })

@@ -8,24 +8,12 @@ export async function PUT(req) {
         const {name,...data}= await req.json()
         const session = await getServerSession(authOptions)
         const email = session.user.email
-
-        try {
-            // await User.updateOne(
-            //     { email: email },
-            //     { $set: name},
-            // );
-            console.log(name)
-            console.log(data)
          await UserInfo.updateOne({email:email},{$set:data},{ upsert: true })
-         //await UserInfo.create({email,...data})
-          
-          } catch (error) {
-            console.error(error);
-          }
-          
-
         return Response.json(true)
-    }).finally(() => closeDatabaseConnection())
+    })
+    .catch((err)=>{
+        return new Response(JSON.stringify({err:err},{status:500}))
+    })
 }
 
 export async function GET(req){
@@ -43,7 +31,5 @@ export async function GET(req){
             error:'Internal Server Error',
           }), { status: 500, headers: { 'Content-Type': 'application/json' } })
     }
-    finally{
-        await closeDatabaseConnection()
-    }
+
 }

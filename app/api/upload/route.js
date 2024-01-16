@@ -38,10 +38,7 @@ export async function POST(req) {
             await deleteObject(downloadURL)
             return Response.error({ message: 'Failed to upload/update image.' });
         }
-        finally{
-            await closeDatabaseConnection()
-        }        
-
+        
     }
     return Response.error({ message: 'Failed to upload/update image.' })
 }

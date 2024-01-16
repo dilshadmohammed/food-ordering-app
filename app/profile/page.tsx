@@ -110,15 +110,15 @@ function page() {
 
     }
 
-
+    if (status === 'unauthenticated') {
+        return redirect('/login')
+    }
     if (status === 'loading'  || !isProfileLoaded) {
         return (
             <h1 className='text-primary m-8 text-center text-4xl'>Loading...</h1>
         )
     }
-    if (status === 'unauthenticated') {
-        return redirect('/login')
-    }
+
 
     const userImage = session?.user?.image;
 
