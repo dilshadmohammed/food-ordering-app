@@ -9,7 +9,7 @@ interface categoryType {
   name: string,
 }
 
-function page() {
+function CategoriesPage() {
   const [categoryName, setCategoryName] = useState('')
   const [categories, setCategories] = useState<[categoryType] | null>()
   const [editedCategory, setEditedCategory] = useState<categoryType | null>(null)
@@ -126,8 +126,8 @@ function page() {
       </form>
       {categories && (<h2 className="mt-8 text-sm text-gray-500">Edit Categories</h2>)}
       {categories && categories.map(c => (
-        <div className="flex gap-2">
-        <button key={c._id}  onClick={() => toggleEditState(c)} className="bg-gray-200 rounded-xl p-2 px-4 
+        <div  key={c._id} className="flex gap-2">
+        <button onClick={() => toggleEditState(c)} className="bg-gray-200 rounded-xl p-2 px-4 
         cursor-pointer mb-2">
           {c.name}
         </button>
@@ -138,4 +138,4 @@ function page() {
   )
 }
 
-export default page
+export default CategoriesPage

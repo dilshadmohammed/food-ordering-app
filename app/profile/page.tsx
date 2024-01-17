@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-function page() {
+function ProfilePage() {
     const { data: session, status, update } = useSession()
     const [userName, setUserName] = useState("")
     const [phone, setPhone] = useState("")
@@ -181,4 +181,4 @@ function page() {
     )
 }
 
-export default page
+export default ProfilePage

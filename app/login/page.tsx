@@ -71,7 +71,7 @@ function LoginPage() {
                     Login with google
                 </button>
                 <div className="text-center text-gray-500 my-4 border-t pt-2">
-                    Don't have an account?&nbsp;<Link className='underline text-gray-700' href={'/register'}>Register here&raquo;</Link>
+                    Don&apos;t have an account?&nbsp;<Link className='underline text-gray-700' href={'/register'}>Register here&raquo;</Link>
                 </div>
             </form>
         </section>
@@ -80,6 +80,3 @@ function LoginPage() {
 
 export default LoginPage
 
-function toast(arg0: string, arg1: { type: string; }) {
-    throw new Error('Function not implemented.');
-}

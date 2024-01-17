@@ -7,7 +7,7 @@ function MenuItem() {
         group hover:bg-white hover:shadow-md hover:shadow-black/25 
         transition-all">
             <div className="relative w-full h-28">
-                <Image  src={'/pizza.png'} layout={'fill'} objectFit={'contain'} alt={'pizza'} />
+                <Image  src={'/pizza.png'} fill={true} style={{objectFit:"contain"}} alt={'pizza'} />
             </div>
             <h4 className="font-semibold text-xl my-3">
                 Pepperoni Pizza

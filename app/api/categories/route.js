@@ -1,4 +1,4 @@
-import { closeDatabaseConnection, connectToDatabase } from "@/dbconnect/dbConnect"
+import { connectToDatabase } from "@/dbconnect/dbConnect"
 import { Category } from "@/models/Category"
 
 export async function POST(req) {

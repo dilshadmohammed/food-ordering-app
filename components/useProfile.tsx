@@ -11,6 +11,7 @@ export function useProfile() {
         city:'',
         country:'',
         isAdmin:false
+        
     });
     const [loading, setLoading] = useState(true);
   

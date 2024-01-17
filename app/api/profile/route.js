@@ -1,8 +1,7 @@
 import {connectToDatabase,closeDatabaseConnection} from '@/dbconnect/dbConnect'
 import { getServerSession } from 'next-auth'
-import {authOptions} from '@/app/api/auth/[...nextauth]/route'
-import { User} from '@/models/User'
-import { UserInfo, userInfo } from '@/models/UserInfo'
+import {authOptions} from '@/libs/AuthOptions'
+import { UserInfo} from '@/models/UserInfo'
 export async function PUT(req) {
     return connectToDatabase().then(async ()=> {
         const {name,...data}= await req.json()
