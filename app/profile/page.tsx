@@ -17,6 +17,7 @@ function ProfilePage() {
     const [country, setCountry] = useState("")
     const [isAdmin, setIsAdmin] = useState(true);
     const [isProfileLoaded,setIsProfileLoaded] = useState(false)
+    const [image,setImage] = useState<File | null>(null)
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -38,6 +39,7 @@ function ProfilePage() {
 
     async function handleProfileInfo(e: FormEvent) {
         e.preventDefault()
+        await handleImageUpload()
         await toast.promise(new Promise<void>(async (resolve, reject) => {
             const response = await fetch('/api/profile', {
                 method: 'PUT',
@@ -71,13 +73,12 @@ function ProfilePage() {
 
     }
 
-    async function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
+    async function handleImageUpload() {
         await toast.promise(new Promise<void>((resolve, reject) => {
-            const files = e.target.files;
 
-            if (files?.length === 1) {
+            if (image) {
                 const data = new FormData();
-                data.set('file', files[0]);
+                data.set('file', image);
                 data.set('username', userName);
 
                 fetch('/api/upload', {
@@ -109,6 +110,15 @@ function ProfilePage() {
 
 
     }
+    
+    function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
+        const files = e.target.files;
+    
+        if (files && files.length > 0) {
+          const file = files[0];
+          setImage(file);
+        }
+      }
 
     if (status === 'unauthenticated') {
         return redirect('/login')
@@ -129,7 +139,7 @@ function ProfilePage() {
                 <div className='flex gap-4'>
                     <div>
                         <div className='p-2 rounded-lg relative max-w-[120px] max-h-[120px'>
-                            <Image className='rounded-lg w-full h-full mb-1' src={userImage || '/default-avatar.png'} alt='avatar' width={250} height={250} />
+                            <Image className='rounded-lg w-full h-full mb-1' src={(image && URL.createObjectURL(image)) || userImage || '/default-avatar.png'} alt='avatar' width={250} height={250} />
                             <label>
                                 <input type="file" className='hidden' onChange={handleImageChange} />
                                 <span className='block border border-gray-300 cursor-pointer rounded-lg p-2 text-center'>Edit</span>

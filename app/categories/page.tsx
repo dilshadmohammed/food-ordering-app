@@ -41,7 +41,7 @@ function CategoriesPage() {
   if (loading) {
     return 'Loading....'
   }
-  if (data.isAdmin) {
+  if (!data.isAdmin) {
     return 'Not an Admin'
   }
 

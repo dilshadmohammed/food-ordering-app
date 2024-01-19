@@ -15,7 +15,7 @@ function UserTabs({isAdmin}:UserTabsProps) {
             {isAdmin && (
                 <>
                     <Link href={'/categories'} className={path == '/categories' ? 'active' : ''}>categories</Link>
-                    <Link href={'/menu-items'} className={path == '/menu-items' ? 'active' : ''}>Menu Items</Link>
+                    <Link href={'/menu-items'} className={path.includes('/menu-items') ? 'active' : ''}>Menu Items</Link>
                     <Link href={'/users'} className={path == '/users' ? 'active' : ''}>Users</Link>
                 </>
             )}

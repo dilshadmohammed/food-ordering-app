@@ -1,4 +1,4 @@
-import {connectToDatabase,closeDatabaseConnection} from '@/dbconnect/dbConnect'
+import {connectToDatabase} from '@/dbconnect/dbConnect'
 import { getServerSession } from 'next-auth'
 import {authOptions} from '@/libs/AuthOptions'
 import { UserInfo} from '@/models/UserInfo'
