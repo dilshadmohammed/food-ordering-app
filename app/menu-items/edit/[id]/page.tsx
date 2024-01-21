@@ -33,7 +33,7 @@ function EditMenuItemsPage() {
                 setDescription(item.description)
                 setBasePrice(item.basePrice)
                 setSizes(item.sizes)
-                setExtraIngridientsPrices(item.extraIngridientsPrices)
+                setExtraIngridientsPrices(item.extraIngredientsPrices)
             })
         })
     },[])
@@ -61,7 +61,7 @@ function EditMenuItemsPage() {
         data.set('basePrice', basePrice);
         data.set('ImageUrl',imageUrl)
         data.set('sizes',JSON.stringify(sizes))
-        data.set('extraIngridientsPrices',JSON.stringify(extraIngridientsPrices))
+        data.set('extraIngredientsPrices',JSON.stringify(extraIngridientsPrices))
         
 
         await toast.promise(new Promise<void>(async(resolve,reject)=>{

@@ -21,7 +21,6 @@ function MenuItemsPage() {
         fetch('/api/menu-items').then(res => {
             res.json().then(menuItems => {
                 setMenuItems(menuItems)
-                console.log(menuItems)
             })
         })
 

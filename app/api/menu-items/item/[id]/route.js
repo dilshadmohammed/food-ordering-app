@@ -20,13 +20,14 @@ export async function GET(req,{params}) {
 export async function PUT(req,{params}) {
   const id = params.id
   const formData = await req.formData()
-    const data = {
+    let data = {
         name : formData.get('itemName'),
         description : formData.get('description'),
-        basePrice : Number(formData.get('basePrice')),
-        sizes:JSON.parse(formData.get('sizes')),
-        extraIngredientsPrices:JSON.parse(formData.get('extraIngridientsPrices'))
+        basePrice : formData.get('basePrice'),
+        sizes: JSON.parse(formData.get('sizes')),  // Parse the string to JSON
+        extraIngredientsPrices: JSON.parse(formData.get('extraIngredientsPrices'))  // Parse the string to JSON
     }
+      
     const oldImage = formData.get('imageUrl')
     const image = formData.get('image')
     let downloadURL;
@@ -51,7 +52,7 @@ export async function PUT(req,{params}) {
         await connectToDatabase()
         if(downloadURL)
             data.image = downloadURL
-        return Response.json(await MenuItem.updateOne({_id:id},{$set:data}))
+        return Response.json(await MenuItem.findByIdAndUpdate(id,data))
     }
   catch(e){
     return Response.error({message:"failed to fetch the item"})
