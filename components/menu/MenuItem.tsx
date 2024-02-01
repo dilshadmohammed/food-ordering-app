@@ -15,7 +15,7 @@ function MenuItem() {
             <p className="text-gray-500 text-sm">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
-            <button className='mt-4 bg-primary text-white rounded-full px-8 py-2'>
+            <button className='mt-4 bg-primary text-white rounded-full px-8 py-2 justify-center'>
                 Add to Cart $12
             </button>
         </div>

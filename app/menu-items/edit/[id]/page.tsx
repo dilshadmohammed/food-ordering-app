@@ -8,11 +8,11 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams, useRouter } from 'next/navigation'
 import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps'
+import DeleteButton from '@/components/DeleteButton'
 
 
 
 function EditMenuItemsPage() {
-
     const { loading, data } = useProfile()
     const {id} = useParams();
     const [image, setImage] = useState<File | null>(null);
@@ -23,6 +23,8 @@ function EditMenuItemsPage() {
     const [sizes, setSizes] = useState<Array<{ name: string; price: string }>>([])
     const [extraIngridientsPrices, setExtraIngridientsPrices] = useState<Array<{ name: string; price: string }>>([])
     const router = useRouter()
+    const [categories,setCategories] = useState<{_id:string,name:string}[]|null>(null)
+    const [category,setCategory] = useState('')
 
     useEffect(() => {
         fetch(`/api/menu-items/item/${id}`).then(res => {
@@ -33,7 +35,16 @@ function EditMenuItemsPage() {
                 setDescription(item.description)
                 setBasePrice(item.basePrice)
                 setSizes(item.sizes)
+                setCategory(item.category)
                 setExtraIngridientsPrices(item.extraIngredientsPrices)
+            })
+        })
+    },[])
+
+    useEffect(()=>{
+        fetch('/api/categories').then(res => {
+            res.json().then(categories => {
+                setCategories(categories)
             })
         })
     },[])
@@ -48,6 +59,25 @@ function EditMenuItemsPage() {
         }
     }
 
+    async function handleDeleteItem() {
+        await toast.promise(new Promise<void>(async (resolve,reject)=>{
+            const res = await fetch(`/api/menu-items/item/${id}`,{
+                method:'DELETE',
+            })
+            console.log(res)
+            if(res.ok){
+                resolve()
+                return router.push('/menu-items')
+            }
+                
+            else
+                reject()
+        }),{
+            loading:'Deleting...',
+            success:'Deleted',
+            error:'Error'
+        })
+    }
 
 
     async function handleFormSubmit(e:FormEvent) {
@@ -60,6 +90,7 @@ function EditMenuItemsPage() {
         data.set('description', description);
         data.set('basePrice', basePrice);
         data.set('ImageUrl',imageUrl)
+        data.set('category',category)
         data.set('sizes',JSON.stringify(sizes))
         data.set('extraIngredientsPrices',JSON.stringify(extraIngridientsPrices))
         
@@ -107,23 +138,23 @@ function EditMenuItemsPage() {
             </Link>
             
         </div>
-            <form className="mt-8 max-w-xl mx-auto" onSubmit={handleFormSubmit}>
+            <form className="mt-8 mx-auto" onSubmit={handleFormSubmit}>
                 <div className="flex gap-4 items-start">
                     <div>
                         {(imageUrl || image)? (
                            <>
-                           <Image className='rounded-lg w-60 h-60 mb-1' src={(image && URL.createObjectURL(image))|| imageUrl} alt='product' width={250} height={250} />
+                           <Image className='rounded-lg w-80 h-80 mb-1' src={(image && URL.createObjectURL(image))|| imageUrl} alt='product' width={250} height={250} />
                            {image && (<span className='block border border-gray-300 cursor-pointer rounded-lg p-2 my-2 text-gray-500 text-sm text-center' onClick={() => setImage(null)}>Cancel</span>)}
                            </> 
                         ) : (
-                            <div className="bg-gray-200 py-28  mb-2 rounded-lg px-8 text-gray-500 text-center w-60 h-60">
+                            <div className="bg-gray-200 py-28  mb-2 rounded-lg px-8 text-gray-500 text-center w-80 h-80">
                                 No image
                             </div>
                         )}
 
                         <label>
                             <input type="file" className='hidden' onChange={handleImageChange} />
-                            <span className='block border border-gray-300 cursor-pointer rounded-lg p-2 text-center'>Edit</span>
+                            <span className='block border border-gray-300 cursor-pointer rounded-lg p-2 mt-4 text-center'>Edit</span>
                         </label>
                     </div>
                     <div className='grow'>
@@ -139,6 +170,12 @@ function EditMenuItemsPage() {
                          value={description}
                          onChange={e => setDescription(e.target.value)} />
 
+                        <label>Category</label>
+                        <select value={category} onChange={e=>setCategory(e.target.value)}>
+                             {categories && categories.map(c => (
+                                <option key={c._id} value={c._id}>{c.name}</option>
+                             ))}
+                        </select>
                         <label>Base price</label>
                         <input
                          type="text"
@@ -155,7 +192,9 @@ function EditMenuItemsPage() {
                         addLabel='Add extra ingridients'
                         props={extraIngridientsPrices}
                         setProps={setExtraIngridientsPrices} />
-                        <button type='submit'>Save</button>
+
+                        <button type='submit' >Save</button>
+                        <DeleteButton className='mt-2' label='Delete this Item' onDelete={handleDeleteItem} />
                     </div>
                 </div>
             </form>

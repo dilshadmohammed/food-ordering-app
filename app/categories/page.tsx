@@ -1,5 +1,6 @@
 'use client'
 
+import DeleteButton from "@/components/DeleteButton";
 import UserTabs from "@/components/layout/UserTabs";
 import { useProfile } from "@/components/useProfile"
 import { FormEvent, useEffect, useState } from "react";
@@ -119,19 +120,23 @@ function CategoriesPage() {
             <label>{editedCategory ? (`Update category: ${editedCategory.name}`) : 'New category'}</label>
             <input type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
           </div>
-          <div className="pb-2">
+          <div className="flex gap-2 pb-2">
             <button type="submit" >{editedCategory ? 'Update' : 'Create'}</button>
+            <button type="button" onClick={() => {
+              setEditedCategory(null)
+              setCategoryName('')
+            }}>Cancel</button>
           </div>
         </div>
       </form>
-      {categories && (<h2 className="mt-8 text-sm text-gray-500">Edit Categories</h2>)}
+      {categories && (<h2 className="mt-8 text-sm text-gray-500">Existing categories</h2>)}
       {categories && categories.map(c => (
         <div  key={c._id} className="flex gap-2">
         <button onClick={() => toggleEditState(c)} className="bg-gray-200 rounded-xl p-2 px-4 
         cursor-pointer mb-2">
           {c.name}
         </button>
-        <button type="button" onClick={() => handleDeleteCategory(c)} className="bg-red-500 text-white rounded-xl p-2 px-4 mb-2 w-auto">Delete</button>
+        <DeleteButton className="bg-red-500 text-white rounded-xl p-2 px-4 mb-2 w-auto" label="Delete" onDelete={() => handleDeleteCategory(c)} />
           </div>
       ))}
     </section>

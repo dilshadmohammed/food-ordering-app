@@ -23,6 +23,7 @@ export async function PUT(req,{params}) {
     let data = {
         name : formData.get('itemName'),
         description : formData.get('description'),
+        category: formData.get('category'),
         basePrice : formData.get('basePrice'),
         sizes: JSON.parse(formData.get('sizes')),  // Parse the string to JSON
         extraIngredientsPrices: JSON.parse(formData.get('extraIngredientsPrices'))  // Parse the string to JSON
@@ -56,6 +57,32 @@ export async function PUT(req,{params}) {
     }
   catch(e){
     return Response.error({message:"failed to fetch the item"})
+  }
+}
+
+export async function DELETE(req, { params }) {
+  const id = params.id;
+  try {
+    await connectToDatabase();
+
+    const menuItem = await MenuItem.findById(id);
+    if (!menuItem) {
+      throw new Error('MenuItem not found');
+    }
+
+    if (menuItem.image) {
+      const image = menuItem.image;
+      const imageRef = ref(storage, image)
+      try {
+        await deleteObject(imageRef)
+      } catch (e) {
+        console.log("old image doesn't exist")
+      }
+    }
+
+    return Response.json(await MenuItem.deleteOne({ _id: id }));
+  } catch (error) {
+    return Response.error({ message: "failed to delete the item" })
   }
 }
 
