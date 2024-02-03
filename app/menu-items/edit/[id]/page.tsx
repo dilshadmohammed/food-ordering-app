@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import { useParams, useRouter } from 'next/navigation'
 import MenuItemPriceProps from '@/components/layout/MenuItemPriceProps'
 import DeleteButton from '@/components/DeleteButton'
+import Loading from '@/components/layout/Loading'
+import NotAdmin from '@/components/layout/NotAdmin'
 
 
 
@@ -28,8 +30,7 @@ function EditMenuItemsPage() {
 
     useEffect(() => {
         fetch(`/api/menu-items/item/${id}`).then(res => {
-            res.json().then(item => {
-               
+            res.json().then(item => {  
                 setItemName(item.name)
                 setImageUrl(item.image)
                 setDescription(item.description)
@@ -117,14 +118,10 @@ function EditMenuItemsPage() {
     }
 
 
-      
-      
-      
-
     if (loading)
-        return 'Loading...'
+        return <Loading/>
     if (!data.isAdmin)
-        return 'Not an Admin'
+        return <NotAdmin/>
     return (
         <section className='mt-8'>
             <UserTabs isAdmin={data.isAdmin} />

@@ -1,5 +1,7 @@
 'use client'
+import Loading from '@/components/layout/Loading';
 import UserTabs from '@/components/layout/UserTabs';
+import { useProfile } from '@/components/useProfile';
 import { useSession } from 'next-auth/react'
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +10,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function ProfilePage() {
+    const {loading,data} = useProfile()
     const { data: session, status, update } = useSession()
     const [userName, setUserName] = useState("")
     const [phone, setPhone] = useState("")
@@ -15,26 +18,19 @@ function ProfilePage() {
     const [postalCode, setPostalCode] = useState("")
     const [city, setCity] = useState("")
     const [country, setCountry] = useState("")
-    const [isAdmin, setIsAdmin] = useState(true);
-    const [isProfileLoaded,setIsProfileLoaded] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
     const [image,setImage] = useState<File | null>(null)
 
-    useEffect(() => {
-        if (status === 'authenticated') {
-            setIsProfileLoaded(false)
-            setUserName(session?.user?.name || '')
-            fetch('/api/profile').then(response => {
-                response.json().then(data => {
-                    setPhone(data.phone)
-                    setStreetAddress(data.streetAddress)
-                    setPostalCode(data.postalCode)
-                    setCity(data.city)
-                    setCountry(data.country)
-                })
-            })
-            setIsProfileLoaded(true)
-        }
-    }, [session, status])
+
+    useEffect(()=>{
+        setUserName(session?.user?.name || '')
+        setPhone(data.phone)
+        setStreetAddress(data.streetAddress)
+        setPostalCode(data.postalCode)
+        setCity(data.city)
+        setCountry(data.country)
+        setIsAdmin(data.isAdmin)
+    },[session,loading])
 
 
     async function handleProfileInfo(e: FormEvent) {
@@ -123,9 +119,9 @@ function ProfilePage() {
     if (status === 'unauthenticated') {
         return redirect('/login')
     }
-    if (status === 'loading'  || !isProfileLoaded) {
+    if (status === 'loading' || loading) {
         return (
-            <h1 className='text-primary m-8 text-center text-4xl'>Loading...</h1>
+            <Loading/>
         )
     }
 

@@ -1,5 +1,7 @@
 'use client'
 import Right from '@/components/icons/Right'
+import Loading from '@/components/layout/Loading'
+import NotAdmin from '@/components/layout/NotAdmin'
 import UserTabs from '@/components/layout/UserTabs'
 import { useProfile } from '@/components/useProfile'
 import Image from 'next/image'
@@ -26,9 +28,9 @@ function MenuItemsPage() {
 
     }, [])
     if (loading)
-        return 'Loading...'
+        return <Loading/>
     if (!data.isAdmin)
-        return 'Not an admin'
+        return <NotAdmin/>
     return (
         <section className='mt-8 max-w-2xl mx-auto'>
             <UserTabs isAdmin={data.isAdmin} />

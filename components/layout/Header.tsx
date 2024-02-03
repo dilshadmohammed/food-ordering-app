@@ -1,6 +1,7 @@
 'use client';
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
+import Loading from './Loading';
 
 function Header() {
   const session = useSession();
@@ -25,6 +26,7 @@ function Header() {
         <Link href={""}>About</Link>
         <Link href={""}>Contact</Link>
       </nav>
+      {status == 'loading' && ( <Loading/> )}
       <nav className="flex gap-4 items-center text-gray-500 font-semibold">
         {status === 'authenticated' && (
           <>

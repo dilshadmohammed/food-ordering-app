@@ -1,6 +1,8 @@
 'use client'
 
 import DeleteButton from "@/components/DeleteButton";
+import Loading from "@/components/layout/Loading";
+import NotAdmin from "@/components/layout/NotAdmin";
 import UserTabs from "@/components/layout/UserTabs";
 import { useProfile } from "@/components/useProfile"
 import { FormEvent, useEffect, useState } from "react";
@@ -40,10 +42,10 @@ function CategoriesPage() {
     fetchCategories();
   }, []);
   if (loading) {
-    return 'Loading....'
+    return <Loading/>
   }
   if (!data.isAdmin) {
-    return 'Not an Admin'
+    return <NotAdmin/>
   }
 
 

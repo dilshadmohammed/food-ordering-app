@@ -7,6 +7,8 @@ import Link from 'next/link'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import Loading from '@/components/layout/Loading'
+import NotAdmin from '@/components/layout/NotAdmin'
 
 function NewMenuItemsPage() {
 
@@ -55,9 +57,9 @@ function NewMenuItemsPage() {
     }
 
     if (loading)
-        return 'Loading...'
+        return <Loading/>
     if (!data.isAdmin)
-        return 'Not an Admin'
+        return <NotAdmin/>
     return (
         <section className='mt-8'>
             <UserTabs isAdmin={data.isAdmin} />
